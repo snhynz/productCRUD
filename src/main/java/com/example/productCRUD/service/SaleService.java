@@ -1,7 +1,15 @@
 package com.example.productCRUD.service;
 
-import org.springframework.stereotype.Service;
+import com.example.productCRUD.model.Sale;
 
-@Service
-public class SaleService {
+import java.util.List;
+
+public interface SaleService {
+    void addSale(Long customerId, Long productId,Long saleId);
+
+    void updateSale(Long customerId, Long productId,Long saleId);
+
+    void deleteSale(Long id);
+
+    List <Sale> getSaleList();
 }

@@ -2,8 +2,12 @@ package com.example.productCRUD.controller;
 
 import com.example.productCRUD.model.Customer;
 import com.example.productCRUD.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.productCRUD.serviceimp.CustomerServiceİmp;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
@@ -15,16 +19,27 @@ private CustomerService customerService;
     }
 
     @PostMapping
-    public void add(@RequestBody Customer customer){
+    public ResponseEntity add(@RequestBody Customer customer){
+        this.customerService.addCustomer(customer);
+        return new ResponseEntity<>("Başarılı", HttpStatus.CREATED);
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        this.customerService.deleteCustomer(id);
+        return new ResponseEntity<>("Başarılı",HttpStatus.OK);
     }
 
     @PutMapping
-    public void update(){}
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void update(@RequestBody Customer customer){
+        this.customerService.updateCustomer(customer);
 
-    @DeleteMapping
-    public void delete(){}
+    }
 
     @GetMapping
-    public void getCustomerList(){}
+    public List<Customer> getCustomerList(){
+        return this.customerService.getCustomer();
+
+    }
 }

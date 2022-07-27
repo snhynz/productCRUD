@@ -1,15 +1,15 @@
 package com.example.productCRUD.service;
 
 import com.example.productCRUD.model.Customer;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class CustomerService {
+public interface CustomerService {
+    void addCustomer(Customer customer);
 
-    private List<Customer> customerList;
-    public void addCustomer(Customer customer){
+    void updateCustomer(Customer customer);
 
-    }
+    void deleteCustomer(Long id);
+
+    List<Customer> getCustomer();
 }
