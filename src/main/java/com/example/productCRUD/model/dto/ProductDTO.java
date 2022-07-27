@@ -1,14 +1,18 @@
-package com.example.productCRUD.model;
+package com.example.productCRUD.model.dto;
 
-public class Product {
+public class ProductDTO {
     private long id;
     private String name;
     private Double price;
 
-    public Product(long id, String name, Double price) {
+    public ProductDTO(long id, String name, Double price) {
         this.id = id;
         this.name = name;
         this.price = price;
+    }
+
+    public ProductDTO() {
+
     }
 
     public long getId() {

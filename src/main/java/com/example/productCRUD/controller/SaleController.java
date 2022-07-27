@@ -1,10 +1,8 @@
 package com.example.productCRUD.controller;
 
-import com.example.productCRUD.model.Customer;
-import com.example.productCRUD.model.Sale;
-import com.example.productCRUD.model.SaleRequestDTO;
+import com.example.productCRUD.model.dto.SaleDTO;
+import com.example.productCRUD.model.dto.SaleRequestDTO;
 import com.example.productCRUD.service.SaleService;
-import com.example.productCRUD.serviceimp.SaleServiceİmp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +38,7 @@ private SaleService saleService;
     }
 
     @GetMapping
-    public ResponseEntity<List <Sale>> getSaleList(){
+    public ResponseEntity<List <SaleDTO>> getSaleList(){
         return new ResponseEntity<>(this.saleService.getSaleList(),HttpStatus.OK);
 
     }

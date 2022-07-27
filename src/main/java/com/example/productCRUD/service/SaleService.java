@@ -1,6 +1,6 @@
 package com.example.productCRUD.service;
 
-import com.example.productCRUD.model.Sale;
+import com.example.productCRUD.model.dto.SaleDTO;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ public interface SaleService {
 
     void deleteSale(Long id);
 
-    List <Sale> getSaleList();
+    List <SaleDTO> getSaleList();
 }

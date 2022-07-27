@@ -1,43 +1,64 @@
 package com.example.productCRUD.serviceimp;
 
-import com.example.productCRUD.model.Product;
+import com.example.productCRUD.model.dto.CustomerDTO;
+import com.example.productCRUD.model.dto.ProductDTO;
+import com.example.productCRUD.model.entity.Customer;
+import com.example.productCRUD.model.entity.Product;
+import com.example.productCRUD.repository.ProductRepository;
 import com.example.productCRUD.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
 public class ProductServiceİmp implements ProductService {
+    @Autowired
+    private ProductRepository productRepository;
 
-    private List <Product> productList=new ArrayList<>();
     @Override
-    public void addProduct(Product product) {
-        this.productList.add(product);
+    @Transactional
+    public void addProduct(ProductDTO productDTO) {
+        Product product = new Product();
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setInsertDate(new Date());
+        productRepository.save(product);
     }
 
     @Override
-    public void updateProduct(Product product) {
-        Product p = this.productList.stream()
-                .filter(product1 -> product1.getId()== product.getId())
-                .findFirst().orElse(null);
-        p.setName(product.getName());
-        p.setId(product.getId());
-        p.setPrice(product.getPrice());
+    @Transactional
+    public void updateProduct(ProductDTO productDTO) {
+        Product product = new Product();
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setId(product.getId());
+        productRepository.save(product);
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long id) {
-        Product p = this.productList.stream()
-                .filter(pr -> pr.getId()==id)
-                .findFirst().orElse(null);
-        if (p!=null) {
-            this.productList.remove(p);
-        }
+        productRepository.deleteById(id);
     }
 
     @Override
-    public List<Product> getProductList() {
-        return this.productList;
+    @Transactional
+    public List<ProductDTO> getProductList() {
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        Iterator<Product> productIterator= productRepository.findAll().iterator();
+        while(productIterator.hasNext()){
+            ProductDTO productDTO = new ProductDTO();
+            Product product = productIterator.next();
+            productDTO.setPrice(product.getPrice());
+            productDTO.setName(product.getName());
+            productDTOS.add(productDTO);
+        }
+
+        return productDTOS;
     }
 }

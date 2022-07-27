@@ -1,8 +1,7 @@
 package com.example.productCRUD.controller;
 
-import com.example.productCRUD.model.Customer;
+import com.example.productCRUD.model.dto.CustomerDTO;
 import com.example.productCRUD.service.CustomerService;
-import com.example.productCRUD.serviceimp.CustomerServiceİmp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,8 @@ private CustomerService customerService;
     }
 
     @PostMapping
-    public ResponseEntity add(@RequestBody Customer customer){
-        this.customerService.addCustomer(customer);
+    public ResponseEntity add(@RequestBody CustomerDTO customerDTO){
+        this.customerService.addCustomer(customerDTO);
         return new ResponseEntity<>("Başarılı", HttpStatus.CREATED);
     }
 
@@ -32,14 +31,29 @@ private CustomerService customerService;
 
     @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void update(@RequestBody Customer customer){
-        this.customerService.updateCustomer(customer);
+    public void update(@RequestBody CustomerDTO customerDTO){
+        this.customerService.updateCustomer(customerDTO);
 
     }
 
     @GetMapping
-    public List<Customer> getCustomerList(){
+    public List<CustomerDTO> getCustomerList(){
         return this.customerService.getCustomer();
 
+    }
+    @GetMapping("findById")
+    public ResponseEntity<CustomerDTO> getCustomerById(@RequestParam(value = "Id")Long Id){
+       return customerService.getCustomerById(Id);
+    }
+    @GetMapping("allCountCustomer")
+    public ResponseEntity<Long> getAllCountCustomer(){
+        return new ResponseEntity<>
+                (customerService.getAllCountCustomer(),HttpStatus.OK);
+    }
+@PostMapping("addList")
+    public ResponseEntity addListCustomer(@RequestBody List<CustomerDTO> customerDTOList){
+        this.customerService.addListCustomerDTO(customerDTOList);
+        return new ResponseEntity<>
+                ("Başarılı",HttpStatus.OK);
     }
 }

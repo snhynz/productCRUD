@@ -1,4 +1,4 @@
-package com.example.productCRUD.model;
+package com.example.productCRUD.model.dto;
 
 public class SaleRequestDTO {
     private Long customerId;
