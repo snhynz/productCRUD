@@ -1,15 +1,14 @@
 package com.example.productCRUD.serviceimp;
 
-import com.example.productCRUD.model.dto.CustomerDTO;
 import com.example.productCRUD.model.dto.ProductDTO;
-import com.example.productCRUD.model.entity.Customer;
 import com.example.productCRUD.model.entity.Product;
 import com.example.productCRUD.repository.ProductRepository;
 import com.example.productCRUD.service.ProductService;
+import com.example.productCRUD.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -20,6 +19,8 @@ public class ProductServiceİmp implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ModelMapperUtils modelMapperUtils;
     @Override
     @Transactional
     public void addProduct(ProductDTO productDTO) {
@@ -47,10 +48,11 @@ public class ProductServiceİmp implements ProductService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDTO> getProductList() {
         List<ProductDTO> productDTOS = new ArrayList<>();
-        Iterator<Product> productIterator= productRepository.findAll().iterator();
+        Iterator<Product> productIterator=
+                productRepository.findAll().iterator();
         while(productIterator.hasNext()){
             ProductDTO productDTO = new ProductDTO();
             Product product = productIterator.next();
@@ -61,4 +63,44 @@ public class ProductServiceİmp implements ProductService {
 
         return productDTOS;
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDTO> getProductByName(String name) {
+        return modelMapperUtils.mapAll(this.productRepository.getProductByName(name),ProductDTO.class);
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDTO> getProductByNameOrPrice(String name, Double price) {
+        return modelMapperUtils.mapAll(this.productRepository.getProductByNameOrPrice(name,price),ProductDTO.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDTO> findDistinctByName(String name) {
+        return modelMapperUtils.mapAll(this.productRepository.findDistinctByName(name),ProductDTO.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDTO> findByPriceGreaterThan() {
+        return this.modelMapperUtils.mapAll(this.productRepository.findByPriceGreaterThan(10000.0),ProductDTO.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDTO> getByPriceGreaterThanAndNameIgnoreCase() {
+        return this.modelMapperUtils.mapAll(this.productRepository
+                .findByPriceGreaterThanAndNameIgnoreCase(10000.0,"laptop"),ProductDTO.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDTO> findAllByPriceOrderByName() {
+        return this.modelMapperUtils.mapAll(this.productRepository.findAllByPriceOrderByName(2000.0),ProductDTO.class);
+    }
+
+
 }

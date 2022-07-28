@@ -4,6 +4,7 @@ import com.example.productCRUD.model.dto.CustomerDTO;
 import com.example.productCRUD.model.entity.Customer;
 import com.example.productCRUD.repository.CustomerRepository;
 import com.example.productCRUD.service.CustomerService;
+import com.example.productCRUD.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,12 @@ public class CustomerServiceİmp implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private ModelMapperUtils modelMapperUtils;
     @Override
 
     public void addCustomer(CustomerDTO customerDTO){
-        Customer customer = new Customer();
-        customer.setName(customerDTO.getName());
-        customer.setSurname(customerDTO.getSurname());
-        customer.setAge(customerDTO.getAge());
+        Customer customer = modelMapperUtils.convertToModel(customerDTO,Customer.class);
         customer.setInsertDate(new Date());
         customerRepository.save(customer);
     }
