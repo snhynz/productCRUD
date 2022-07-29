@@ -102,5 +102,25 @@ public class ProductServiceİmp implements ProductService {
         return this.modelMapperUtils.mapAll(this.productRepository.findAllByPriceOrderByName(2000.0),ProductDTO.class);
     }
 
+    @Override
+    public Integer productPriceSum(){
+        return this.productRepository.productPriceSum();
+    }
+
+    @Override
+    public List<Object> productPrice(Double price) {
+        return this.productRepository.productPrice(price);
+    }
+
+    @Override
+    public Integer productPriceAvg() {
+        return this.productRepository.productPriceAvg();
+    }
+
+    @Override
+    public Long sumProductsFilterByName(String name) {
+        return this.productRepository.sumProductsFilterByName(name);
+    }
+
 
 }

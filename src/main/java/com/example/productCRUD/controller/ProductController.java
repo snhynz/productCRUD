@@ -6,6 +6,7 @@ import com.example.productCRUD.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,33 +46,66 @@ public class ProductController {
     }
 
     @GetMapping("getByName")
+    @Transactional(readOnly = true)
     public List<ProductDTO> getProductByName(
             @RequestParam(name= "name") String name){
         return this.productService.getProductByName(name);
     }
     @GetMapping("getByNameOrPrice")
+    @Transactional(readOnly = true)
     public List<ProductDTO> getProductByNameOrPrice(
             @RequestParam(name= "name") String name,
             @RequestParam(name = "price") Double price){
         return this.productService.getProductByNameOrPrice(name,price);
     }
     @GetMapping("findDistinctByName")
+    @Transactional(readOnly = true)
     public List<ProductDTO> findDistinctByName
             (@RequestParam(name = "name") String name){
         return this.productService.findDistinctByName(name);
     }
 
     @GetMapping("greaterThan")
+    @Transactional(readOnly = true)
     public List<ProductDTO> findByPriceGreaterThan(){
         return this.productService.findByPriceGreaterThan();
     }
     @GetMapping("uzunisim")
+    @Transactional(readOnly = true)
     public List<ProductDTO> getByPriceGreaterThanAndNameIgnoreCase(){
         return this.productService.getByPriceGreaterThanAndNameIgnoreCase();
     }
     @GetMapping("allProduct")
+    @Transactional(readOnly = true)
     public List<ProductDTO> findAllByPriceOrderByName(){
         return this.productService.findAllByPriceOrderByName();
     }
 
+    @GetMapping("allProductPriceSum")
+    @Transactional(readOnly = true)
+    public Integer productPriceSum(){
+        return productService.productPriceSum();
+    }
+    @GetMapping("allProductPrice")
+    @Transactional(readOnly = true)
+    public List<Object> productPrice(
+            @RequestParam(name = "price")Double price
+    ){
+        return productService.productPrice(price);
+    }
+
+    @GetMapping("allProductPriceAvg")
+    @Transactional(readOnly = true)
+    public Integer productPriceAvg(){
+        return productService.productPriceAvg();
+    }
+
+   @GetMapping("FilterByName/{name}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<Long> sumProductsFilterByName(
+            @PathVariable(name="name") String name
+    ){
+        return ResponseEntity.ok(
+                this.productService.sumProductsFilterByName(name));
+    }
 }

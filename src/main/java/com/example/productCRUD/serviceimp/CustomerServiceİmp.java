@@ -96,4 +96,41 @@ public class CustomerServiceİmp implements CustomerService {
     }
     this.customerRepository.saveAll(customerList);
 }
+
+    @Override
+    public List<CustomerDTO> getByNameIgnoreCaseOrSurnameIgnoreCase(String name , String surname) {
+        return modelMapperUtils
+                .mapAll(this.customerRepository
+                        .findByNameContainingIgnoreCaseOrSurnameContainingIgnoreCase(name,surname),CustomerDTO.class);
+    }
+
+    @Override
+    public List<CustomerDTO> getByAgeBetween(Integer age, Integer age2) {
+        return modelMapperUtils
+                .mapAll(this.customerRepository
+                        .findByAgeBetween(age+1,age2-1),CustomerDTO.class);
+    }
+
+
+    @Override
+    public List<CustomerDTO> getByNameContainingIgnoreCase(String name) {
+        return modelMapperUtils
+                .mapAll(this.customerRepository.
+                        findByNameContainingIgnoreCaseOrderByNameDesc(name),CustomerDTO.class);
+    }
+
+    @Override
+    public List<Object> groupByAge() {
+        return this.customerRepository.groupByAge();
+    }
+
+    @Override
+    public List<Object> groupByAgeWithHQL() {
+        return customerRepository.groupByAgeWithHQL();
+    }
+
+    @Override
+    public List<Object> groupByAgeWithoutHQL() {
+        return customerRepository.groupByAgeWithoutHQL();
+    }
 }

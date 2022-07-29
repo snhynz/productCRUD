@@ -6,10 +6,22 @@ import javax.persistence.*;
 @Table(name = "product")
 public class Product extends BaseEntity {
 
+    @ManyToOne
+    @JoinColumn(name = "sale_id")
+    private Sale Sale;
+
     @Column(name = "Product_Name")
     private String name;
     @Column(name = "Product_Price")
     private Double price;
+
+    public com.example.productCRUD.model.entity.Sale getSale() {
+        return Sale;
+    }
+
+    public void setSale(com.example.productCRUD.model.entity.Sale Sale) {
+        this.Sale = Sale;
+    }
 
     public String getName() {
         return name;

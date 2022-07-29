@@ -28,4 +28,12 @@ public interface ProductService {
 
     List<ProductDTO> findAllByPriceOrderByName();
 
+    Integer productPriceSum();
+
+    List<Object> productPrice(Double price);
+
+    Integer productPriceAvg();
+
+    Long sumProductsFilterByName(String name);
+
 }

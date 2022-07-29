@@ -3,6 +3,7 @@ package com.example.productCRUD.model.entity;
 import javax.persistence.*;
 
 @Entity
+@NamedQuery(name="Customer.groupByAge",query="select c.age from Customer c group by c.age")
 @Table(name = "customer")
 public class Customer extends BaseEntity {
 
