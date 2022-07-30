@@ -1,13 +1,15 @@
 package com.example.productCRUD.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "product")
 public class Product extends BaseEntity {
-
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "sale_id")
+    @JoinColumn(name = "sale_id", insertable = false, updatable = false)
     private Sale Sale;
 
     @Column(name = "Product_Name")

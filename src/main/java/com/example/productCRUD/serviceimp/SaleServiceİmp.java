@@ -4,7 +4,14 @@ package com.example.productCRUD.serviceimp;
 import com.example.productCRUD.model.dto.CustomerDTO;
 import com.example.productCRUD.model.dto.ProductDTO;
 import com.example.productCRUD.model.dto.SaleDTO;
+import com.example.productCRUD.model.entity.Customer;
+import com.example.productCRUD.model.entity.Product;
+import com.example.productCRUD.model.entity.Sale;
+import com.example.productCRUD.repository.CustomerRepository;
+import com.example.productCRUD.repository.ProductRepository;
+import com.example.productCRUD.repository.SaleRepository;
 import com.example.productCRUD.service.SaleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,45 +19,43 @@ import java.util.List;
 
 @Service
 public class SaleServiceİmp implements SaleService {
-    private CustomerServiceİmp customerService;
-    private ProductServiceİmp productService;
 
-    public SaleServiceİmp(CustomerServiceİmp customerService, ProductServiceİmp productService) {
-        this.customerService = customerService;
-        this.productService = productService;
-    }
+   @Autowired
+   private ProductRepository productRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private SaleRepository saleRepository;
 
     List <SaleDTO> saleDTOList = new ArrayList<>();
 
     @Override
-    public void addSale(Long customerId, Long productId,Long saleId) {
-        CustomerDTO c = this.customerService.getCustomer().stream()
-                .filter(customer -> customer.getId()==customerId)
-                .findFirst().orElse(null);
-        ProductDTO p = this.productService.getProductList().stream()
-                .filter(product -> product.getId()==productId)
-                .findFirst().orElse(null);
-        SaleDTO s = new SaleDTO(saleId,p,c);
-        this.saleDTOList.add(s);
+    public void addSale(Long customerId, List<Long> productId,Long saleId) {
+        Sale sale = new Sale();
+        Customer customer = customerRepository.
+                findById(customerId).orElse(null);
+        sale.setCustomer(customer);
+      List<Product> products = (List<Product>)productRepository
+                .findAllById(productId);
+        sale.setProduct(products);
+        saleRepository.save(sale);
     }
+
+
 
     @Override
-   public void updateSale(Long customerId, Long productId,Long saleId) {
-        CustomerDTO c = this.customerService.getCustomer().stream()
-                .filter(customer -> customer.getId()==customerId)
-                .findFirst().orElse(null);
-        ProductDTO p = this.productService.getProductList().stream()
-                .filter(product -> product.getId()==productId)
-                .findFirst().orElse(null);
-
-        SaleDTO s = this.saleDTOList.stream()
-                .filter(saleDTO -> saleDTO.getId()==saleId)
-                .findFirst().orElse(null);
-        if (s != null){
-            s.setCustomer(c);
-            s.setProduct(p);
+   public void updateSale(Long customerId,List<Long> productId,Long saleId) {
+        Sale sale =
+        saleRepository.findById(saleId).orElse(new Sale());
+        Customer customer = customerRepository
+                .findById(customerId).orElse(null);
+        sale.setCustomer(customer);
+        List<Product> products = (List<Product>)productRepository
+                .findAllById(productId);
+        saleRepository.save(sale);
         }
-    }
+
 
     @Override
     public void deleteSale(Long id) {
